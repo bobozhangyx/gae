@@ -1,29 +1,53 @@
-# Copyright 2016 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# test.py
+import urllib
+import urllib2
+from flask import Flask
+from flask import request
 
-import webapp2
+app = Flask(__name__)
 
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return '<h1>Home</h1>'
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
+@app.route('/signin', methods=['GET'])
+def signin_form():
+    return '''<form action="/signin" method="post">
+              <p><input name="username"></p>
+              <p><input name="password" type="password"></p>
+              <p><button type="submit">Sign In</button></p>
+              </form>'''
 
+@app.route('/signin', methods=['POST'])
+def signin():
+    if request.form['username']=='admin' and request.form['password']=='password':
+        return '<h3>Hello, admin!</h3>'
+    return '<h3>Bad username or password.</h3>'
 
-app = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
+@app.route('/down_get', methods=['GET', 'POST'])
+def down_get():
+    url = 'http://www.baidu.com'
+    values = {}
+    values['username'] = "1016903103@qq.com"
+    values['password'] = "XXXX"
+    data = urllib.urlencode(values)
+    geturl = url + "?" + data
+    user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+    header = {'User-Agent': user_agent}
+    request = urllib2.Request(geturl, headers=header)
+    response = urllib2.urlopen(request)
+    return response.read()
 
-app.run()
-
+@app.route('/down_post', methods=['GET', 'POST'])
+def down_post():
+    values = {"username": "1016903103@qq.com", "password": "XXXX"}
+    data = urllib.urlencode(values)
+    url = "https://passport.csdn.net/account/login?from=http://my.csdn.net/my/mycsdn"
+    user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+    headers = {'User-Agent': user_agent}
+    data = urllib.urlencode(values)
+    request = urllib2.Request(url, data, headers)
+    response = urllib2.urlopen(request)
+    return response.read()
+if __name__ == '__main__':
+    app.run()
