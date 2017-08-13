@@ -8,7 +8,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return '<h1>Home</h1>'
+    url = 'http://ipecho.net/plain'
+    request = urllib2.Request(url)
+    response = urllib2.urlopen(request)
+    return response.read()
 
 @app.route('/signin', methods=['GET'])
 def signin_form():
@@ -49,5 +52,6 @@ def down_post():
     request = urllib2.Request(url, data, headers)
     response = urllib2.urlopen(request)
     return response.read()
+
 if __name__ == '__main__':
     app.run()
