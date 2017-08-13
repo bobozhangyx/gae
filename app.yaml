@@ -1,6 +1,10 @@
 runtime: python27
 api_version: 1
+service: gae1
 threadsafe: true
+
+manual_scaling:
+  instances: 1
 
 handlers:
 - url: /.*
