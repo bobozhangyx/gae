@@ -25,4 +25,5 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
 ], debug=True)
 
-webapp2.WSGIApplication([('/', MainPage)], debug=True)
+app.run()
+
