@@ -29,16 +29,12 @@ def signin():
 
 @app.route('/down_get', methods=['GET', 'POST'])
 def down_get():
-    url = 'http://www.baidu.com'
-    values = {}
-    values['username'] = "1016903103@qq.com"
-    values['password'] = "XXXX"
-    data = urllib.urlencode(values)
-    geturl = url + "?" + data
+    url = request.form['url']
+    url = urllib
     user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
     header = {'User-Agent': user_agent}
-    request = urllib2.Request(geturl, headers=header)
-    response = urllib2.urlopen(request)
+    target_request = urllib2.Request(url, headers=header)
+    response = urllib2.urlopen(target_request)
     return response.read()
 
 @app.route('/down_post', methods=['GET', 'POST'])
